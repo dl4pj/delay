@@ -26,7 +26,7 @@ use core::arch::asm;
 /// Internal function to implement a variable busy-wait loop.
 /// # Arguments
 /// * 'count' - an i32, the number of times to cycle the loop.
-pub fn delay(count: u32) {
+pub fn delay(count: u64) {
     // Our asm busy-wait takes a 16 bit word as an argument,
     // so the max number of loops is 2^16
     let outer_count = count / 65536;
@@ -65,8 +65,8 @@ pub fn delay_us(us: u64) {
     // picoseconds
     let ps = us * 1000;
     let ps_lp = 1000000000 / (avr_config::CPU_FREQUENCY_HZ / 4);
-    let loops = (ps / ps_lp as u64);
-    delay(loops as u32);
+    let loops = ps / ps_lp as u64;
+    delay(loops);
 }
 
 #[cfg(test)]
